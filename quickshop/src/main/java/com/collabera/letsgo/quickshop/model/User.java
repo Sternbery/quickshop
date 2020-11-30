@@ -1,5 +1,8 @@
 package com.collabera.letsgo.quickshop.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class User {
 	private long id;
 	private String first_name;
@@ -13,6 +16,19 @@ public class User {
 	public User() {
 		super();
 	}
+	
+	public User(ResultSet rs) throws SQLException {
+		super();
+		this.id = rs.getLong("user_id");
+		this.first_name = 	rs.getString("first_name");
+		this.last_name = 	rs.getString("last_name");
+		this.email = 		rs.getString("email");
+		this.phone_number = rs.getString("phone_number");
+		this.username = 	rs.getString("username");
+		this.password = 	rs.getString("password");
+		this.role = 		UserRole.valueOf(rs.getString("role"));
+	}
+	
 	public User(String first_name, String last_name, String email, String phone_number, String username,
 			String password, UserRole role) {
 		super();

@@ -1,9 +1,7 @@
 package com.collabera.letsgo.quickshop;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,20 +22,22 @@ public class SpringSideApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringSideApplication.class, args);
 	}
-
+	
 	@Bean
-	public Connection connection() throws SQLException, ClassNotFoundException {
-
-		//Class.forName("com.mysql.jdbc.Driver");
+	public DataSource getBasicDataSource() throws ClassNotFoundException {
 		
-	    Connection conn = null;
-	    Properties props = new Properties();
-	    props.put("user", this.userName);
-	    props.put("password", this.password);
-        conn = DriverManager.getConnection(this.url, props);
-	    
-	    System.out.println("Connected to database");
-	    return conn;
+		Class.forName("org.apache.commons.pool2.PooledObjectFactory");
+		
+		BasicDataSource ds = new BasicDataSource();
+		
+		ds.setUrl(url);
+        ds.setUsername(userName);
+        ds.setPassword(password);
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
+        
+        return ds;
 	}
 	
 }
